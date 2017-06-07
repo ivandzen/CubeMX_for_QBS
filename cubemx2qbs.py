@@ -100,7 +100,6 @@ def parsePackage(pack) :
 						for f in files.findall('file') :
 							if ('condition' in f.attrib and f.attrib['condition'] == 'GCC Toolchain') :
 								result = re.match( r'.*startup_(.*)\.s', f.attrib['name'], re.M|re.I)
-								print result.group(1).upper()
 								defineProcessorName = result.group(1).upper().replace('X', 'x')
 
 	result = "import qbs\n\n"
@@ -181,7 +180,7 @@ def parseFiles(files) :
 	result = []
 	for child in files :
 		if child.tag == 'file' :
-			if child.attrib.has_key('condition') and child.attrib['condition'] != 'GCC Toolchain' :
+			if child.attrib.has_key('condition') and (child.attrib['condition'] != 'GCC Toolchain' and child.attrib['condition'] != '') :
 				continue
 			cur_file = child.attrib['name'].replace('\\', '/')
 			dir_name = os.path.dirname(cur_file)
