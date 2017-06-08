@@ -43,6 +43,7 @@ Linker_Flags = [ "-Xlinker",
 project_name = ""
 processor_name = ""
 includepaths = []
+filesWritten = []
 
 ################################################################################
 
@@ -184,6 +185,11 @@ def parseFiles(files) :
 				continue
 			cur_file = child.attrib['name'].replace('\\', '/')
 			dir_name = os.path.dirname(cur_file)
+			if cur_file in filesWritten :
+				# if the current file was exported already skip it
+				# to prevent the qbs from claiming about duplicated files
+				continue 
+			filesWritten.append(cur_file)
 			if cur_file[-2:] == ".h" and includepaths.count(dir_name) == 0 :
 				includepaths.append(dir_name)
 			result.append(cur_file)
